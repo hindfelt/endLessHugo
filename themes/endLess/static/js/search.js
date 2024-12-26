@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
         searchResults: !!searchResults,
         closeSearch: !!closeSearch
     });
-
     // Fetch posts data
     fetch('/index.json')
         .then(response => {
@@ -34,6 +33,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .catch(error => console.error('Error loading posts:', error));
+
+        if (searchTrigger) {
+            // Add multiple event listeners for better cross-browser support
+            ['click', 'touchend'].forEach(eventType => {
+                searchTrigger.addEventListener(eventType, function(e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Stop event bubbling
+                    console.log(`Search ${eventType} triggered`); // Debug line
+                    openSearch();
+                }, { passive: false }); // Ensure preventDefault works
+            });
+        }
 
     // Open search with Ctrl+K or Cmd+K
     document.addEventListener('keydown', function(e) {
@@ -125,4 +136,74 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
-});
+    let selectedIndex = -1; // Add this to track selected item
+
+    // Handle keyboard navigation
+    searchInput.addEventListener('keydown', function(e) {
+        const results = searchResults.querySelectorAll('.search-result-item');
+        const maxIndex = results.length - 1;
+
+        switch(e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                selectedIndex = Math.min(selectedIndex + 1, maxIndex);
+                updateSelection(results);
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                selectedIndex = Math.max(selectedIndex - 1, -1);
+                updateSelection(results);
+                break;
+            case 'Enter':
+                e.preventDefault();
+                if (selectedIndex >= 0 && results[selectedIndex]) {
+                    window.location.href = results[selectedIndex].getAttribute('data-url');
+                }
+                break;
+        }
+    });
+
+    // Add this function to update the visual selection
+    function updateSelection(results) {
+        results.forEach((result, index) => {
+            if (index === selectedIndex) {
+                result.classList.add('selected');
+                result.scrollIntoView({ block: 'nearest' });
+            } else {
+                result.classList.remove('selected');
+            }
+        });
+    }
+
+    // Update your displayResults function to include data-url
+    function displayResults(results) {
+        if (!searchResults) return;
+        
+        if (results.length === 0) {
+            searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
+            return;
+        }
+
+        selectedIndex = -1; // Reset selection when displaying new results
+
+        searchResults.innerHTML = results
+            .slice(0, 10)
+            .map(post => `
+                <div class="search-result-item" data-url="${post.permalink}">
+                    <h3>${post.title}</h3>
+                    <time>${post.date}</time>
+                </div>
+            `)
+            .join('');
+    }
+
+    // Add these styles to highlight the selected item
+    const style = document.createElement('style');
+    style.textContent = `
+        .search-result-item.selected {
+            background-color: #f0f0f0;
+            outline: 2px solid #0066cc;
+        }
+    `;
+    document.head.appendChild(style);
+})

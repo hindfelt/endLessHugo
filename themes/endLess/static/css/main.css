@@ -456,3 +456,94 @@ h1, .h1 {
         padding: 8px;
     }
 }
+/* Navigation Layout */
+nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-left: auto; /* Push nav links to the right */
+}
+
+/* Update search trigger styles */
+.search-trigger {
+    margin-left: 20px; /* Add space between nav links and search */
+    height: 36px; /* Fixed height for better alignment */
+}
+
+/* Make the logo more prominent */
+.site-logo {
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: #333;
+}
+
+/* Responsive navigation */
+@media (max-width: 768px) {
+    nav .container {
+        padding: 0.5rem;
+    }
+    
+    .nav-links {
+        gap: 10px;
+    }
+    
+    .site-logo {
+        font-size: 1rem;
+    }
+}
+
+/* Enhanced search trigger styles for cross-browser compatibility */
+.search-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer !important;
+    color: #666;
+    transition: all 0.2s ease;
+    margin-left: 20px;
+    position: relative;
+    z-index: 9999; /* Increased z-index */
+    isolation: isolate; /* Creates a new stacking context */
+    -webkit-transform: translateZ(0); /* Forces GPU acceleration */
+    transform: translateZ(0);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    pointer-events: auto !important;
+}
+
+/* Ensure the button and its contents are clickable */
+.search-trigger * {
+    pointer-events: none; /* Make sure clicks go to the button */
+}
+
+/* Navigation container styles */
+nav {
+    position: relative;
+    z-index: 9998;
+    isolation: isolate;
+}
+
+.nav-links {
+    position: relative;
+    z-index: 9998;
+    isolation: isolate;
+}
+
+/* Modal styles */
+.search-modal {
+    position: fixed;
+    z-index: 99999; /* Highest z-index */
+    isolation: isolate;
+}
