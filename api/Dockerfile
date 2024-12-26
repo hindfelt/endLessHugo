@@ -7,17 +7,18 @@ WORKDIR /app
 # Install git for private repos (if needed)
 RUN apk add --no-cache git
 
-# Copy go mod files
+# Copy go mod file
 COPY go.mod ./
 
-# Download dependencies
-RUN go mod download
+# Download dependencies and show any errors
+RUN go mod download && go mod verify
 
 # Copy source code
 COPY . .
 
-# Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -o upload-service
+# Show directory contents and try to build with verbose output
+RUN ls -la && \
+    CGO_ENABLED=0 GOOS=linux go build -v -o upload-service
 
 # Expose port
 EXPOSE 8080
