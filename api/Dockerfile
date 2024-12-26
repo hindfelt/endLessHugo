@@ -4,8 +4,12 @@ FROM golang:1.21-alpine
 # Set working directory
 WORKDIR /app
 
+# Install git for private repos (if needed)
+RUN apk add --no-cache git
+
 # Copy go mod files
-COPY go.mod go.sum ./
+COPY go.mod ./
+COPY go.sum ./
 
 # Download dependencies
 RUN go mod download

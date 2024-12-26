@@ -1,5 +1,5 @@
-module upload-api
+module github.com/hindfelt/endlesshugo/api
 
-go 1.23.4
+go 1.21
 
-require gopkg.in/yaml.v2 v2.4.0 // indirect
+require gopkg.in/yaml.v2 v2.4.0
