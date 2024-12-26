@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine
+FROM golang:1.21.6-alpine  # Exact version match
 
 WORKDIR /app
 
