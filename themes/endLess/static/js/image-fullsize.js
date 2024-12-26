@@ -1,35 +1,59 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Script loaded');
-    
-    // Find all images in post content
-    const images = document.querySelectorAll('.post-content img');
-    console.log('Found images:', images.length);
-    
-    images.forEach(img => {
-        console.log('Original src:', img.src);
-        let fullSizeUrl = img.src;
+    // Prevent default image click behavior
+    document.querySelectorAll('.post-content img').forEach(img => {
+        img.addEventListener('click', function(e) {
+            e.preventDefault();
+            showImageOverlay(this.src);
+        });
         
-        // Remove -scaled from URL
-        if (fullSizeUrl.includes('-scaled')) {
-            fullSizeUrl = fullSizeUrl.replace('-scaled', '');
-            console.log('Removed scaled:', fullSizeUrl);
+        // Prevent drag and right-click default behaviors
+        img.addEventListener('dragstart', e => e.preventDefault());
+        img.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Make images look clickable
+        img.style.cursor = 'zoom-in';
+    });
+
+    // Create and append overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'image-overlay';
+    overlay.innerHTML = `
+        <img class="fullsize-image">
+        <div class="image-overlay-instructions">Click image to open full size in new tab • ESC to close</div>
+    `;
+    document.body.appendChild(overlay);
+
+    const fullsizeImage = overlay.querySelector('.fullsize-image');
+
+    // Add click handler to open full size in new tab
+    fullsizeImage.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent overlay from closing
+        window.open(this.src, '_blank');
+    });
+
+    function showImageOverlay(src) {
+        fullsizeImage.src = src;
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        fullsizeImage.style.cursor = 'zoom-in'; // Show it's clickable
+    }
+
+    function hideOverlay() {
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // Close on overlay click
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+            hideOverlay();
         }
-        
-        // Update image src to full size
-        img.src = fullSizeUrl;
-        
-        // Handle the wrapping anchor
-        const parentAnchor = img.closest('a');
-        if (parentAnchor) {
-            console.log('Updating existing anchor:', parentAnchor.href);
-            parentAnchor.href = fullSizeUrl;
-        } else {
-            console.log('Creating new anchor for:', fullSizeUrl);
-            const wrapper = document.createElement('a');
-            wrapper.href = fullSizeUrl;
-            wrapper.style.cursor = 'zoom-in';
-            img.parentNode.insertBefore(wrapper, img);
-            wrapper.appendChild(img);
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            hideOverlay();
         }
     });
 });

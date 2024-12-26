@@ -11,7 +11,7 @@
                     {{ range .Site.Menus.main }}
                     <a href="{{ .URL }}" class="nav-link">{{ .Name }}</a>
                     {{ end }}
-                    <!-- Add this search button -->
+                    <!-- Search button -->
                     <button class="search-trigger" aria-label="Search">
                         <svg width="20" height="20" viewBox="0 0 24 24">
                             <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -21,6 +21,7 @@
                 </div>
             </div>
         </nav>
+
         <!-- Search Modal -->
         <div id="search-modal" class="search-modal">
             <div class="search-modal-content">
@@ -31,9 +32,9 @@
                     <input type="text" id="search-input" placeholder="Search posts... (Press 'Esc' to close)">
                     <button id="close-search" aria-label="Close search">×</button>
                 </div>
-            <div id="search-results" class="search-results"></div>
+                <div id="search-results" class="search-results"></div>
+            </div>
         </div>
-    </div>
     </header>
 
     <main>
@@ -46,15 +47,19 @@
         </div>
     </footer>
 
-    <!-- Custom JS from config -->
+    <!-- Scroll to top button -->
+    <button id="scroll-to-top" aria-label="Scroll to top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
     {{ range .Site.Params.customJS }}
     <script src="{{ . | relURL }}"></script>
     {{ end }}
-    <!-- Add this before </body> -->
     <script src="{{ "js/infinite-scroll.js" | relURL }}"></script>
-
-
-<!-- Scripts -->
-<script src="{{ "js/search.js" | relURL }}"></script>
+    <script src="{{ "js/search.js" | relURL }}"></script>
+    <script src="{{ "js/scroll-to-top.js" | relURL }}"></script>
 </body>
 </html>

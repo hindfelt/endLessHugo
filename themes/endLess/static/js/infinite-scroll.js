@@ -58,15 +58,15 @@ class InfiniteScroll {
         const loadMoreDiv = document.getElementById('page-loader');
         const gridContainer = document.getElementById('post-grid');
         const nextPage = loadMoreDiv.dataset.nextPage;
-
+    
         try {
             const response = await fetch(nextPage);
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             
-            // Add new posts
-            const newPosts = doc.querySelectorAll('.post-card');
+            // Add new posts - exclude hero post
+            const newPosts = doc.querySelectorAll('.post-card:not(.hero)');
             newPosts.forEach(post => {
                 gridContainer.appendChild(post.cloneNode(true));
             });
@@ -80,7 +80,7 @@ class InfiniteScroll {
                 loadMoreDiv.remove();
                 this.observer.disconnect();
             }
-
+    
         } catch (error) {
             console.error('Error loading more posts:', error);
         } finally {
@@ -94,21 +94,45 @@ class InfiniteScroll {
         this.loading = true;
         const container = document.querySelector('.next-posts-container');
         const currentUrl = window.location.pathname;
-        const nextPostUrl = this.getNextPostUrl(currentUrl);
-
+    
         try {
-            const response = await fetch(nextPostUrl);
-            const html = await response.text();
+            // Fetch the index to get the next post
+            const response = await fetch('/index.json');
+            const data = await response.json();
+            
+            // Find current post index
+            const currentIndex = data.posts.findIndex(post => 
+                post.permalink.endsWith(currentUrl) || currentUrl.includes(post.permalink)
+            );
+            
+            console.log('Current index:', currentIndex); // Debug
+    
+            if (currentIndex === -1 || currentIndex === data.posts.length - 1) {
+                console.log('No next post available');
+                return;
+            }
+    
+            // Get next post
+            const nextPost = data.posts[currentIndex + 1];
+            if (!nextPost?.permalink) {
+                console.log('Next post URL not found');
+                return;
+            }
+    
+            console.log('Loading next post:', nextPost.permalink); // Debug
+    
+            // Fetch and display next post
+            const postResponse = await fetch(nextPost.permalink);
+            const html = await postResponse.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             
-            // Get the next post content
-            const nextPost = doc.querySelector('.single-post');
-            if (nextPost) {
+            const nextPostContent = doc.querySelector('.single-post');
+            if (nextPostContent) {
                 // Create wrapper for the new post
                 const postWrapper = document.createElement('article');
                 postWrapper.className = 'single-post';
-                postWrapper.innerHTML = nextPost.innerHTML;
+                postWrapper.innerHTML = nextPostContent.innerHTML;
                 
                 // Add separator
                 const separator = document.createElement('div');
@@ -119,47 +143,20 @@ class InfiniteScroll {
                 container.appendChild(postWrapper);
                 
                 // Update URL without page reload
-                const newUrl = doc.querySelector('link[rel="canonical"]')?.href || nextPostUrl;
-                window.history.pushState({}, '', newUrl);
+                window.history.pushState({}, '', nextPost.permalink);
                 
                 // Update document title
-                document.title = doc.title;
+                document.title = nextPost.title;
                 
                 // Observe the new last article
                 this.observer.observe(postWrapper);
             }
-
+    
         } catch (error) {
             console.error('Error loading next post:', error);
         } finally {
             this.loading = false;
         }
-    }
-
-    getNextPostUrl(currentUrl) {
-        // Remove trailing slash if present
-        currentUrl = currentUrl.replace(/\/$/, '');
-        
-        // Split the URL into parts
-        const parts = currentUrl.split('/');
-        
-        // If we're in a numbered post, increment the number
-        const lastPart = parts[parts.length - 1];
-        if (/^\d+$/.test(lastPart)) {
-            const nextNum = parseInt(lastPart) + 1;
-            parts[parts.length - 1] = nextNum.toString();
-        } else {
-            // If not numbered, append /2 (or increment existing number)
-            const match = currentUrl.match(/\/(\d+)$/);
-            if (match) {
-                const nextNum = parseInt(match[1]) + 1;
-                return currentUrl.replace(/\/\d+$/, `/${nextNum}`);
-            } else {
-                return `${currentUrl}/2`;
-            }
-        }
-        
-        return parts.join('/');
     }
 }
 

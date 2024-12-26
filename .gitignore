@@ -8,3 +8,8 @@ tmp.log
 *.log
 content/
 hugo-theme-itheme/
+config.toml
+.env
+blogg.code-workspace
+resources/
+node_modules/

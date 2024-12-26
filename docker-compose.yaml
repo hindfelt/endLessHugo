@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  hugo:
+    image: ghcr.io/${GITHUB_USERNAME}/${REPO_NAME}-hugo:latest
+    restart: unless-stopped
+    ports:
+      - "${HUGO_PORT}:1313"
+    volumes:
+      - ${CONTENT_PATH}:/src/content
+      - ${CONFIG_PATH}:/src/config.toml
+    environment:
+      - TZ=${HUGO_TIMEZONE}
+
+  upload-service:
+    image: ghcr.io/${GITHUB_USERNAME}/${REPO_NAME}-api:latest
+    restart: unless-stopped
+    ports:
+      - "${UPLOAD_PORT}:8080"
+    volumes:
+      - ${CONTENT_PATH}:/app/content
+      - ${CONFIG_PATH}:/app/config.toml
+    environment:
+      - TZ=${HUGO_TIMEZONE}
+      - UPLOAD_KEY=${UPLOAD_KEY}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_REGION=${AWS_REGION:-}
+      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME:-}
+
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 3600 --cleanup
+    restart: unless-stopped

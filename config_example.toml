@@ -17,7 +17,7 @@ format = "yaml"
   paginate = 12
 
 [params.api]
-    uploadKey = "agnes"
+    uploadKey = "your-secret-key-here"
 
 [outputs]
   home = ["HTML", "JSON", "RSS"]
