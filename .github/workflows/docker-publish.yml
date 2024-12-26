@@ -12,9 +12,9 @@ env:
   HUGO_TIMEZONE: ${{ vars.HUGO_TIMEZONE }}
   UPLOAD_PORT: ${{ vars.UPLOAD_PORT }}
   GITHUB_USERNAME: ${{ vars.USERNAME }}
-  REPO_NAME: ${{ vars.REPO_NAME }}
-  HUGO_IMAGE_NAME: ${{ github.repository }}-hugo
-  API_IMAGE_NAME: ${{ github.repository }}-api
+  REPO_NAME: endlesshugo  # Changed to lowercase
+  HUGO_IMAGE_NAME: ${{ github.repository | lower }}-hugo  # Added lowercase transform
+  API_IMAGE_NAME: ${{ github.repository | lower }}-api    # Added lowercase transform
 
 jobs:
   build:
