@@ -1,0 +1,458 @@
+/* 1. Variables */
+:root {
+    --font-primary: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 2. Base Styles */
+body {
+    font-family: var(--font-primary);
+    line-height: 1.5;
+}
+
+/* 3. Typography */
+h1, .h1 {
+    font-family: var(--font-primary);
+    font-size: 400%;
+    font-weight: 500;
+}
+
+/* 4. Banner */
+.banner-container {
+    width: 100%;
+    background-color: #f5f5f5;
+    overflow: hidden;
+}
+
+.banner {
+    width: 100%;
+    height: 240px;
+    background-image: url('../images/header_img.gif');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-position: center;
+}
+
+/* 5. Container and Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-weight: bolder;
+}
+
+.site-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* 6. Grid Layout */
+.post-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+/* 7. Hero Post */
+.post-card.hero {
+    grid-column: 1 / -1;
+    margin-bottom: 40px;
+    position: relative;
+    height: auto; /* CHANGED: from fixed height to auto */
+    min-height: 60vh; /* ADDED: minimum height */
+    max-height: 90vh; /* ADDED: maximum height */
+    overflow: hidden;
+}
+
+.hero .card-image {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.hero .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero .card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px;
+    background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.7) 25%,
+        rgba(0, 0, 0, 0.9)
+    );
+    color: white;
+    z-index: 2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.hero .card-title {
+    font-size: 2.5em;
+    margin: 10px 0;
+    line-height: 1.2;
+    max-width: 80%;
+    color: white;
+}
+
+.hero .card-title a {
+    color: white;
+    text-decoration: none;
+}
+
+.hero .card-meta {
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* 8. Regular Post Cards */
+.post-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 30px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+}
+
+/* 9. Card Images */
+.card-image {
+    display: block;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card-image:hover img {
+    transform: scale(1.05);
+}
+
+/* 10. Card Content */
+.card-content {
+    padding: 20px;
+}
+
+.card-meta {
+    display: block;
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.card-title {
+    margin: 0 0 10px 0;
+    font-size: 1.2em;
+}
+
+.card-title a {
+    color: #333;
+    text-decoration: none;
+}
+
+.card-title a:hover {
+    color: #0066cc;
+}
+
+/* 11. Debug Filename */
+.debug-filename {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 10px;
+    font-family: monospace;
+    padding: 4px 8px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.hero .debug-filename {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* 12. Single Post Content */
+.post-content {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 2rem auto;
+}
+
+.post-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.post-header {
+    margin: 2rem 0;
+}
+
+.post-title {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.post-meta {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* 13. Navigation */
+.site-logo {
+    font-family: var(--font-primary);
+    font-weight: 700;
+}
+
+.nav-links {
+    font-family: var(--font-primary);
+    font-weight: 400;
+}
+
+/* 14. Loader */
+#page-loader {
+    height: 20px;
+    margin: 20px 0;
+}
+
+/* 15. Responsive Adjustments */
+@media (max-width: 1024px) {
+    .post-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .hero .card-image {
+        height: 60vh; /* CHANGED: Relative height on tablets */
+    }
+    
+    h1, .h1 {
+        font-size: 300%; /* Smaller heading on tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .post-container {
+        padding: 0 15px;
+    }
+    
+    .post-content img {
+        margin: 1.5rem auto;
+    }
+    
+    h1, .h1 {
+        font-size: 250%; /* Even smaller on mobile */
+    }
+}
+
+@media (max-width: 640px) {
+    .post-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero .card-image {
+        height: 50vh; /* CHANGED: Shorter height on mobile */
+    }
+    
+    .hero .card-title {
+        font-size: 1.5em;
+    }
+}
+/* Search Modal */
+.search-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.search-modal-content {
+    position: relative;
+    max-width: 600px;
+    margin: 100px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.search-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+    background: #f8f8f8;
+}
+
+.search-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    fill: #666;
+}
+
+#search-input {
+    flex-grow: 1;
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+    padding: 8px;
+    font-family: var(--font-primary);
+}
+
+#search-input:focus {
+    outline: none;
+}
+
+#close-search {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    padding: 0 8px;
+}
+
+#close-search:hover {
+    color: #000;
+}
+
+.search-results {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.search-result-item {
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 8px;
+}
+
+.search-result-item:hover {
+    background: #f5f5f5;
+}
+
+.search-result-item h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.search-result-item time {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Show modal with fade in */
+.search-modal.active {
+    display: block;
+    animation: fadeIn 0.2s ease-out;
+}
+/* Add these to your existing search styles */
+.search-result-item {
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-result-item.selected {
+    background-color: #f0f0f0;
+    outline: 2px solid #0066cc;
+}
+
+.search-result-item:hover {
+    background-color: #f5f5f5;
+}
+
+.search-results {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* Search trigger button */
+.search-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.search-trigger:hover {
+    background: #f5f5f5;
+    border-color: #ddd;
+}
+
+.search-trigger svg {
+    fill: currentColor;
+}
+
+.search-shortcut {
+    font-size: 0.8em;
+    padding: 2px 6px;
+    background: #eee;
+    border-radius: 4px;
+    color: #666;
+}
+
+/* For Windows/Linux users */
+@media not all and (mac-system) {
+    .search-shortcut::before {
+        content: 'Ctrl';
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .search-shortcut {
+        display: none;
+    }
+    
+    .search-trigger {
+        padding: 8px;
+    }
+}

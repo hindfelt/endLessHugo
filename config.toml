@@ -1,0 +1,19 @@
+baseURL = "http://localhost:1313/"
+languageCode = "en-us"
+title = "En generation på tillväxt"
+theme = 'endLess'
+
+[frontmatter]
+format = "yaml"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[params]
+  dateFormat = "2006-01-02"
+  mainSections = ["content"]
+
+[outputs]
+  home = ["HTML", "JSON", "RSS"]

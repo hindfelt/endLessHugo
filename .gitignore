@@ -1,0 +1,10 @@
+# Edit your .gitignore file to contain:
+public/
+resources/
+.DS_Store
+.hugo_build.lock
+tmp/
+tmp.log
+*.log
+content/
+hugo-theme-itheme/

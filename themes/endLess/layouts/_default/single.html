@@ -1,0 +1,52 @@
+{{ define "main" }}
+<article class="single-post">
+    <div class="post-container">
+        <header class="post-header">
+            <h1 class="post-title">{{ .Title }}</h1>
+            <time class="post-meta">{{ .Date.Format "January 2, 2006" }}</time>
+        </header>
+
+        <div class="post-content">
+            {{ .Content }}
+        </div>
+    </div>
+</article>
+<script src="{{ "js/image-fullsize.js" | relURL }}"></script>
+
+<!-- Next Posts Section -->
+<div class="next-posts-container">
+    {{ $currentPage := . }}
+    {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
+    {{ $currentIndex := 0 }}
+    
+    {{ range $index, $page := $pages }}
+        {{ if eq $page.Permalink $currentPage.Permalink }}
+            {{ $currentIndex = $index }}
+        {{ end }}
+    {{ end }}
+    
+    {{ $nextPosts := after (add $currentIndex 1) $pages | first 2 }}
+    
+    {{ range $nextPosts }}
+    <article class="next-post-preview" data-url="{{ .RelPermalink }}">
+        {{ if .Params.featured_image }}
+        <div class="preview-image">
+            <img src="{{ .Params.featured_image }}" alt="{{ .Title }}" loading="lazy">
+        </div>
+        {{ end }}
+        <div class="preview-content">
+            <h2 class="preview-title">{{ .Title }}</h2>
+            <div class="preview-meta">
+                <time>{{ .Date.Format "January 2, 2006" }}</time>
+            </div>
+            {{ if .Description }}
+            <p class="preview-description">{{ .Description }}</p>
+            {{ end }}
+            <div class="preview-content-full">
+                {{ .Content }}
+            </div>
+        </div>
+    </article>
+    {{ end }}
+</div>
+{{ end }}

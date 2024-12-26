@@ -1,0 +1,31 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    
+    <!-- Meta tags -->
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    
+    <!-- Favicon -->
+    {{ with .Site.Params.favicon }}
+    <link rel="icon" type="image/x-icon" href="{{ . | relURL }}">
+    {{ end }}
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+    
+    <!-- Custom CSS from config -->
+    {{ range .Site.Params.customCSS }}
+    <link rel="stylesheet" href="{{ . | relURL }}">
+    {{ end }}
+    
+    <!-- RSS -->
+    {{ range .AlternativeOutputFormats -}}
+        {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+    {{ end -}}
+</head>

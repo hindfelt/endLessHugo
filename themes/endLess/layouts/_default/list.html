@@ -1,0 +1,53 @@
+{{ define "main" }}
+<div class="container">
+    <h1 class="site-title">{{ .Title }}</h1>
+    
+    <div id="post-grid" class="post-grid">
+        {{ $pages := .Site.RegularPages }}
+        {{ $paginator := .Paginate $pages 20 }}
+        
+        <!-- ADDED: Hero post (first post) -->
+        {{ range first 1 $paginator.Pages }}
+            <article class="post-card hero">
+                {{ if .Params.cover }}
+                <div class="card-image hero-image">
+                    <img src="{{ .Params.cover }}" alt="{{ .Title }}" loading="lazy">
+                </div>
+                {{ end }}
+                <div class="card-content">
+                    <time class="card-meta">{{ .Date.Format "January 2, 2006" }}</time>
+                    <h2 class="card-title">
+                        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                    </h2>
+                    <div class="debug-filename">File: {{ .File.Path }}</div>
+                </div>
+            </article>
+        {{ end }}
+        
+        <!-- Regular posts (skip first one) -->
+        {{ range after 1 $paginator.Pages }}
+            <article class="post-card">
+                {{ if .Params.cover }}
+                <a href="{{ .RelPermalink }}" class="card-image">
+                    <img src="{{ .Params.cover }}" alt="{{ .Title }}" loading="lazy">
+                </a>
+                {{ end }}
+                <div class="card-content">
+                    <time class="card-meta">{{ .Date.Format "January 2, 2006" }}</time>
+                    <h2 class="card-title">
+                        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                    </h2>
+                    <div class="debug-filename">File: {{ .File.Path }}</div>
+                </div>
+            </article>
+        {{ end }}
+    </div>
+
+    {{ if .Paginator.HasNext }}
+        <div id="page-loader" 
+             data-next-page="{{ .Paginator.Next.URL }}"
+             data-current-page="{{ .Paginator.PageNumber }}">
+        </div>
+    {{ end }}
+</div>
+{{ end }}
