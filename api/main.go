@@ -59,23 +59,29 @@ func main() {
 	// Initialize auth
 	auth.Init()
 
-	// Health check (keep unprotected)
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Health check called")
-		fmt.Fprintf(w, "OK")
+	// Create a protected mux for Hugo content
+	hugoMux := http.NewServeMux()
+	hugoMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		hugoURL := "http://localhost:1313" + r.URL.Path
+		resp, err := http.Get(hugoURL)
+		if err != nil {
+			http.Error(w, "Failed to reach Hugo", http.StatusBadGateway)
+			return
+		}
+		defer resp.Body.Close()
+		io.Copy(w, resp.Body)
 	})
 
-	// Auth routes
-	http.HandleFunc("/login", auth.HandleLogin)
+	// Auth routes (unprotected)
 	http.HandleFunc("/auth/google/callback", auth.HandleCallback)
+	http.HandleFunc("/login", auth.HandleLogin)
 	http.HandleFunc("/logout", auth.HandleLogout)
 
-	// Protected upload route
-	http.Handle("/upload", auth.RequireAuth(http.HandlerFunc(handleUpload)))
+	// Everything else goes through auth
+	http.Handle("/", auth.RequireAuth(hugoMux))
 
-	port := "8080"
-	fmt.Printf("Server starting on :%s\n", port)
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
+	fmt.Printf("Server running on :8000\n")
+	if err := http.ListenAndServe(":8000", nil); err != nil {
 		panic(err)
 	}
 }

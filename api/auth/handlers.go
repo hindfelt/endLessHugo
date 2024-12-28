@@ -13,6 +13,7 @@ type UserInfo struct {
 }
 
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("Login request received: %s\n", r.URL.String())
 	session, _ := Store.Get(r, "auth-session")
 
 	// Generate OAuth URL
@@ -26,7 +27,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleCallback(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Callback received") // Debug
+	fmt.Printf("Callback received: %s\n", r.URL.String())
 
 	code := r.URL.Query().Get("code")
 	fmt.Printf("Auth code: %s\n", code) // Debug
