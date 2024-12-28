@@ -13,3 +13,5 @@ config.toml
 blogg.code-workspace
 resources/
 node_modules/
+config.go
+blogg.code-workspace

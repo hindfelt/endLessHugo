@@ -3,6 +3,8 @@ languageCode = "en-us"
 title = "En generation på tillväxt"
 theme = 'endLess'
 
+disablePathToLower = true
+
 [frontmatter]
 format = "yaml"
 
@@ -15,6 +17,7 @@ format = "yaml"
   dateFormat = "2006-01-02"
   mainSections = ["content"]
   paginate = 12
+
 
 [params.api]
     uploadKey = "agnes"
