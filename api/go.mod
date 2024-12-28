@@ -1,6 +1,6 @@
 module api
 
-go 1.23.4
+go 1.23
 
 require (
 	github.com/gorilla/sessions v1.4.0
